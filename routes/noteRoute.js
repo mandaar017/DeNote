@@ -118,19 +118,21 @@ router.post('/login' , async (req,res,next)=> {
 });
 
 //IPFS
-router.post('/ipfs/upload', upload.single('File_Note') , async(req,res,next)=>{
+router.post('/ifps/upload', upload.single('File_Note') , async(req,res,next)=>{
     try {
         const title=req.body.title;
         const subject=req.body.subject;
         const branch=req.body.branch;
         const sem=req.body.sem;
         const uploader=req.body.uploader;
+        const rating=req.body.rating;
         let note=new Note();
         note.title=title;
         note.subject=subject;
         note.branch=branch;
         note.sem=sem;
         note.uploader=uploader;
+        note.rating=rating;
         if(req.file){
             
             const data=new FormData();
@@ -196,6 +198,7 @@ router.get('/ifps/get',async(req,res,next)=>{
         const {branch} = req.query;
         const {sem} = req.query;
         const {subject} = req.query;
+        const {rating}=req.query;
         const queryObject={};
         if(title){
             queryObject.title={$regex : title , $options : "i"}
@@ -208,6 +211,9 @@ router.get('/ifps/get',async(req,res,next)=>{
         }
         if(subject){
             queryObject.subject={$regex : subject , $options : "i"}
+        }
+        if(rating){
+            queryObject.rating={$regex : rating , $options : "i"}
         }
         const note=await Note.find(queryObject);
         if(note){
@@ -265,6 +271,7 @@ router.put('/ifps/update/:id', upload.single('File_Note') ,async(req,res,next) =
         note.branch = req.body.branch || note.branch;
         note.sem = req.body.sem || note.sem;
         note.uploader = req.body.uploader || note.uploader;
+        note.rating=req.body.rating || note.rating;
 
         note.save();
         

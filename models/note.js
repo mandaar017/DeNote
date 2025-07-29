@@ -31,6 +31,9 @@ const noteSchema = new mongoose.Schema({
     uploadedAt : {
         type : Date,
         default : Date.now
+    },
+    rating : {
+        type : String
     }
 });
 
